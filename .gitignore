@@ -1,0 +1,23 @@
+# build output
+/bserve
+/bcurl
+/build/
+*.o
+*.a
+*.out
+*.asan
+
+# test and temporary output
+*.log
+*.tmp
+__pycache__/
+*.pyc
+core
+core.*
+
+# editors / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store

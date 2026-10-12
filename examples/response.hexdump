@@ -1,0 +1,105 @@
+# BHTP/1 example: the complete response (server -> client): RESPONSE + DATA
+# command: python3 tools/capture_frames.py localhost 9000 /index.html   (same request as: bcurl -vv localhost:9000/index.html)
+# These are the bytes that crossed the TCP connection, captured from the real
+# programs (see scripts/gen_hexdumps.sh). Nothing below was typed by hand.
+
+RX FRAME #1  RESPONSE  (102 bytes)
+
+  0000: 42 48 54 50 01 02 00 00  00 00 00 5a 00 c8 06 03  |BHTP.......Z....|
+  0010: 00 09 74 65 78 74 2f 68  74 6d 6c 04 00 03 32 31  |..text/html...21|
+  0020: 33 07 00 0a 62 73 65 72  76 65 2f 31 2e 30 09 00  |3...bserve/1.0..|
+  0030: 1d 54 68 75 2c 20 30 31  20 4a 61 6e 20 32 30 32  |.Thu, 01 Jan 202|
+  0040: 36 20 30 30 3a 30 30 3a  30 30 20 47 4d 54 0a 00  |6 00:00:00 GMT..|
+  0050: 08 6e 6f 2d 63 61 63 68  65 08 00 0a 6b 65 65 70  |.no-cache...keep|
+  0060: 2d 61 6c 69 76 65                                 |-alive|
+
+  Offset  Bytes                      Meaning
+  ------  -------------------------  ---------------------------------------------
+  0x0000  42 48 54 50                magic = "BHTP"
+  0x0004  01                         version = 1
+  0x0005  02                         type = 0x02  RESPONSE
+  0x0006  00 00                      flags = 0x0000  (none set)
+  0x0008  00 00 00 5a                payload_length = 90
+  
+          -- payload (RESPONSE) --
+  0x000c  00 c8                      status = 200  OK
+  0x000e  06                         header_count = 6
+  0x000f  03                         header[0] tag = 3  -> static name "content-type"
+  0x0010  00 09                      header[0] value_length = 9
+  0x0012  74 65 78 74 2f 68 74 6d    header[0] value = "text/html"
+  0x001a  6c                           (continued)
+  0x001b  04                         header[1] tag = 4  -> static name "content-length"
+  0x001c  00 03                      header[1] value_length = 3
+  0x001e  32 31 33                   header[1] value = "213"
+  0x0021  07                         header[2] tag = 7  -> static name "server"
+  0x0022  00 0a                      header[2] value_length = 10
+  0x0024  62 73 65 72 76 65 2f 31    header[2] value = "bserve/1.0"
+  0x002c  2e 30                        (continued)
+  0x002e  09                         header[3] tag = 9  -> static name "last-modified"
+  0x002f  00 1d                      header[3] value_length = 29
+  0x0031  54 68 75 2c 20 30 31 20    header[3] value = "Thu, 01 Jan 2026 00:00:00 GMT"
+  0x0039  4a 61 6e 20 32 30 32 36      (continued)
+  0x0041  20 30 30 3a 30 30 3a 30      (continued)
+  0x0049  30 20 47 4d 54               (continued)
+  0x004e  0a                         header[4] tag = 10  -> static name "cache-control"
+  0x004f  00 08                      header[4] value_length = 8
+  0x0051  6e 6f 2d 63 61 63 68 65    header[4] value = "no-cache"
+  0x0059  08                         header[5] tag = 8  -> static name "connection"
+  0x005a  00 0a                      header[5] value_length = 10
+  0x005c  6b 65 65 70 2d 61 6c 69    header[5] value = "keep-alive"
+  0x0064  76 65                        (continued)
+
+RX FRAME #2  DATA  (225 bytes)
+
+  0000: 42 48 54 50 01 03 00 01  00 00 00 d5 3c 21 44 4f  |BHTP........<!DO|
+  0010: 43 54 59 50 45 20 68 74  6d 6c 3e 0a 3c 68 74 6d  |CTYPE html>.<htm|
+  0020: 6c 3e 0a 3c 68 65 61 64  3e 0a 20 20 20 20 3c 74  |l>.<head>.    <t|
+  0030: 69 74 6c 65 3e 4e 69 73  74 68 61 20 42 48 54 50  |itle>Nistha BHTP|
+  0040: 20 53 65 72 76 65 72 3c  2f 74 69 74 6c 65 3e 0a  | Server</title>.|
+  0050: 3c 2f 68 65 61 64 3e 0a  3c 62 6f 64 79 3e 0a 20  |</head>.<body>. |
+  0060: 20 20 20 3c 68 31 3e 48  65 6c 6c 6f 20 66 72 6f  |   <h1>Hello fro|
+  0070: 6d 20 4e 69 73 74 68 61  27 73 20 42 48 54 50 20  |m Nistha's BHTP |
+  0080: 53 65 72 76 65 72 21 3c  2f 68 31 3e 0a 20 20 20  |Server!</h1>.   |
+  0090: 20 3c 70 3e 54 68 69 73  20 70 61 67 65 20 77 61  | <p>This page wa|
+  00a0: 73 20 73 65 72 76 65 64  20 75 73 69 6e 67 20 74  |s served using t|
+  00b0: 68 65 20 42 69 6e 61 72  79 20 48 54 54 50 2d 6c  |he Binary HTTP-l|
+  00c0: 69 6b 65 20 50 72 6f 74  6f 63 6f 6c 2e 3c 2f 70  |ike Protocol.</p|
+  00d0: 3e 0a 3c 2f 62 6f 64 79  3e 0a 3c 2f 68 74 6d 6c  |>.</body>.</html|
+  00e0: 3e                                                |>|
+
+  Offset  Bytes                      Meaning
+  ------  -------------------------  ---------------------------------------------
+  0x0000  42 48 54 50                magic = "BHTP"
+  0x0004  01                         version = 1
+  0x0005  03                         type = 0x03  DATA
+  0x0006  00 01                      flags = 0x0001  END_STREAM
+  0x0008  00 00 00 d5                payload_length = 213
+  
+          -- payload (DATA) --
+  0x000c  3c 21 44 4f 43 54 59 50    body bytes: "<!DOCTYP"
+  0x0014  45 20 68 74 6d 6c 3e 0a      (continued) "E html>\n"
+  0x001c  3c 68 74 6d 6c 3e 0a 3c      (continued) "<html>\n<"
+  0x0024  68 65 61 64 3e 0a 20 20      (continued) "head>\n  "
+  0x002c  20 20 3c 74 69 74 6c 65      (continued) "  <title"
+  0x0034  3e 4e 69 73 74 68 61 20      (continued) ">Nistha "
+  0x003c  42 48 54 50 20 53 65 72      (continued) "BHTP Ser"
+  0x0044  76 65 72 3c 2f 74 69 74      (continued) "ver</tit"
+  0x004c  6c 65 3e 0a 3c 2f 68 65      (continued) "le>\n</he"
+  0x0054  61 64 3e 0a 3c 62 6f 64      (continued) "ad>\n<bod"
+  0x005c  79 3e 0a 20 20 20 20 3c      (continued) "y>\n    <"
+  0x0064  68 31 3e 48 65 6c 6c 6f      (continued) "h1>Hello"
+  0x006c  20 66 72 6f 6d 20 4e 69      (continued) " from Ni"
+  0x0074  73 74 68 61 27 73 20 42      (continued) "stha's B"
+  0x007c  48 54 50 20 53 65 72 76      (continued) "HTP Serv"
+  0x0084  65 72 21 3c 2f 68 31 3e      (continued) "er!</h1>"
+  0x008c  0a 20 20 20 20 3c 70 3e      (continued) "\n    <p>"
+  0x0094  54 68 69 73 20 70 61 67      (continued) "This pag"
+  0x009c  65 20 77 61 73 20 73 65      (continued) "e was se"
+  0x00a4  72 76 65 64 20 75 73 69      (continued) "rved usi"
+  0x00ac  6e 67 20 74 68 65 20 42      (continued) "ng the B"
+  0x00b4  69 6e 61 72 79 20 48 54      (continued) "inary HT"
+  0x00bc  54 50 2d 6c 69 6b 65 20      (continued) "TP-like "
+  0x00c4  50 72 6f 74 6f 63 6f 6c      (continued) "Protocol"
+  0x00cc  2e 3c 2f 70 3e 0a 3c 2f      (continued) ".</p>\n</"
+  0x00d4  62 6f 64 79 3e 0a 3c 2f      (continued) "body>\n</"
+  0x00dc  68 74 6d 6c 3e               (continued) "html>"

@@ -1,0 +1,46 @@
+# BHTP/1 example: one complete REQUEST frame (client -> server)
+# command: python3 tools/capture_frames.py localhost 9000 /index.html   (same request as: bcurl -vv localhost:9000/index.html)
+# These are the bytes that crossed the TCP connection, captured from the real
+# programs (see scripts/gen_hexdumps.sh). Nothing below was typed by hand.
+
+TX FRAME #1  REQUEST  (86 bytes)
+
+  0000: 42 48 54 50 01 01 00 00  00 00 00 4a 01 00 0b 2f  |BHTP.......J.../|
+  0010: 69 6e 64 65 78 2e 68 74  6d 6c 05 01 00 0e 6c 6f  |index.html....lo|
+  0020: 63 61 6c 68 6f 73 74 3a  39 30 30 30 02 00 09 62  |calhost:9000...b|
+  0030: 63 75 72 6c 2f 31 2e 30  06 00 03 2a 2f 2a 05 00  |curl/1.0...*/*..|
+  0040: 08 69 64 65 6e 74 69 74  79 08 00 0a 6b 65 65 70  |.identity...keep|
+  0050: 2d 61 6c 69 76 65                                 |-alive|
+
+  Offset  Bytes                      Meaning
+  ------  -------------------------  ---------------------------------------------
+  0x0000  42 48 54 50                magic = "BHTP"
+  0x0004  01                         version = 1
+  0x0005  01                         type = 0x01  REQUEST
+  0x0006  00 00                      flags = 0x0000  (none set)
+  0x0008  00 00 00 4a                payload_length = 74
+  
+          -- payload (REQUEST) --
+  0x000c  01                         method = 0x01  GET
+  0x000d  00 0b                      path_length = 11
+  0x000f  2f 69 6e 64 65 78 2e 68    path = "/index.html"
+  0x0017  74 6d 6c                     (continued)
+  0x001a  05                         header_count = 5
+  0x001b  01                         header[0] tag = 1  -> static name "host"
+  0x001c  00 0e                      header[0] value_length = 14
+  0x001e  6c 6f 63 61 6c 68 6f 73    header[0] value = "localhost:9000"
+  0x0026  74 3a 39 30 30 30            (continued)
+  0x002c  02                         header[1] tag = 2  -> static name "user-agent"
+  0x002d  00 09                      header[1] value_length = 9
+  0x002f  62 63 75 72 6c 2f 31 2e    header[1] value = "bcurl/1.0"
+  0x0037  30                           (continued)
+  0x0038  06                         header[2] tag = 6  -> static name "accept"
+  0x0039  00 03                      header[2] value_length = 3
+  0x003b  2a 2f 2a                   header[2] value = "*/*"
+  0x003e  05                         header[3] tag = 5  -> static name "accept-encoding"
+  0x003f  00 08                      header[3] value_length = 8
+  0x0041  69 64 65 6e 74 69 74 79    header[3] value = "identity"
+  0x0049  08                         header[4] tag = 8  -> static name "connection"
+  0x004a  00 0a                      header[4] value_length = 10
+  0x004c  6b 65 65 70 2d 61 6c 69    header[4] value = "keep-alive"
+  0x0054  76 65                        (continued)
